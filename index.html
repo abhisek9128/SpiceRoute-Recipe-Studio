@@ -48,7 +48,7 @@ input {
     padding: 8px;
     width: 200px;
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: 5px solid #ccc;
 }
 
 /* Grid */
@@ -60,6 +60,12 @@ input {
 }
 
 /* Card */
+.recipe img {
+    width: 200%;
+    height: 300px;        /* fixed height */
+    object-fit: cover;    /* crop nicely */
+    border-radius: 5px;
+}
 .recipe {
     background: rgba(255,255,255,0.85);
     border-radius: 15px;
@@ -88,6 +94,16 @@ input {
 .hidden {
     display: none;
 }
+.details {
+    display: none;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.recipe.active .details {
+    display: inline-block;
+}
+
 
 </style>
 </head>
@@ -112,10 +128,30 @@ input {
 <div class="container" id="recipes">
 
 <!-- VEG -->
-<div class="recipe veg">
-<img src="https://source.unsplash.com/300x200/?paneer">
+<div class="recipe veg" onclick="toggleDetails(this)">
+<img src="c:\Users\Abhisek\Downloads\pre-prepared-food-showcasing-ready-eat-delicious-meals-go.jpg">
 <h2>Paneer Butter Masala</h2>
-<p>Creamy tomato paneer curry</p>
+
+<div class="details">
+<p><b>🧂 Ingredients:</b></p>
+<ul>
+<li>Paneer</li>
+<li>Tomato</li>
+<li>Butter</li>
+<li>Cream</li>
+<li>Spices</li>
+</ul>
+
+<p><b>👨‍🍳 Steps:</b></p>
+<ol>
+<li>Heat butter in pan</li>
+<li>Add tomato paste & spices</li>
+<li>Add paneer cubes</li>
+<li>Cook for 10 minutes</li>
+<li>Add cream and serve</li>
+</ol>
+</div>
+</div>
 </div>
 
 <div class="recipe veg">
@@ -150,7 +186,7 @@ input {
 </div>
 
 <div class="recipe nonveg">
-<img src="https://source.unsplash.com/300x200/?mutton,curry">
+<img src="c:\Users\Abhisek\Downloads\pexels-prabal-9609846.jpg">
 <h2>Mutton Curry</h2>
 <p>Slow cooked mutton</p>
 </div>
@@ -165,8 +201,6 @@ input {
 <img src="https://source.unsplash.com/300x200/?fish,fry">
 <h2>Fish Fry</h2>
 <p>Spicy fried fish</p>
-</div>
-
 </div>
 
 <script>
@@ -197,6 +231,9 @@ function searchRecipe() {
 /* Dark Mode */
 function toggleDark() {
     document.body.classList.toggle("dark");
+}
+function toggleDetails(card) {
+    card.classList.toggle("active");
 }
 
 </script>
