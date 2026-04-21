@@ -23,6 +23,8 @@
 
     body {
       margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
       font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
       background:
         radial-gradient(circle at top left, rgba(255, 223, 186, 0.85), transparent 34%),
@@ -65,6 +67,17 @@
       }
       50% {
         box-shadow: 0 10px 24px rgba(255, 87, 34, 0.28);
+      }
+    }
+
+    @keyframes welcomeGlow {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        text-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+      }
+      50% {
+        transform: translateY(-4px) scale(1.01);
+        text-shadow: 0 16px 34px rgba(255, 246, 229, 0.35);
       }
     }
 
@@ -130,6 +143,75 @@
       color: #fff;
     }
 
+    .search-shell {
+      flex: 1 1 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-wrap {
+      position: relative;
+      width: min(760px, 100%);
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon,
+    .search-clear {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .search-icon {
+      left: 10px;
+      background: rgba(199, 91, 44, 0.08);
+    }
+
+    .search-clear {
+      right: 8px;
+      border: 0;
+      cursor: pointer;
+      background: transparent;
+      pointer-events: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+    }
+
+    .search-clear.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .search-clear:hover {
+      background: rgba(199, 91, 44, 0.12);
+      transform: translateY(-50%) scale(1.06);
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding-left: 58px;
+      padding-right: 52px;
+    }
+
+    .filters-bar {
+      flex: 1 1 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
     .chip {
       padding: 9px 12px;
       border: 0;
@@ -156,6 +238,20 @@
     .quick-item:active,
     .back-btn:active {
       transform: scale(0.97);
+    }
+
+    .extra-filter.is-collapsed {
+      display: none;
+    }
+
+    .more-toggle {
+      background: linear-gradient(135deg, #31231e, #5d453b);
+      color: #fff;
+    }
+
+    .more-toggle:hover,
+    .more-toggle.active {
+      background: linear-gradient(135deg, var(--accent), #e58b4e);
     }
 
     .dark-toggle {
@@ -554,6 +650,186 @@
       margin-bottom: 6px;
     }
 
+    .welcome-overlay,
+    .auth-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(34, 20, 14, 0.6);
+      backdrop-filter: blur(14px);
+    }
+
+    .welcome-card,
+    .auth-card {
+      width: min(100%, 540px);
+      border-radius: 28px;
+      padding: 28px;
+      background:
+        radial-gradient(circle at top right, rgba(255, 223, 186, 0.76), transparent 34%),
+        linear-gradient(145deg, rgba(255, 252, 248, 0.98), rgba(255, 240, 229, 0.96));
+      color: var(--text-main);
+      box-shadow: 0 26px 60px rgba(31, 16, 11, 0.26);
+      animation: popIn 0.36s ease both;
+    }
+
+    body.dark .welcome-card,
+    body.dark .auth-card {
+      background:
+        radial-gradient(circle at top right, rgba(255, 152, 91, 0.15), transparent 34%),
+        linear-gradient(145deg, rgba(35, 25, 21, 0.98), rgba(26, 20, 17, 0.98));
+      color: #f7ede7;
+    }
+
+    .welcome-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(199, 91, 44, 0.12);
+      color: var(--accent-deep);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .welcome-card h2 {
+      margin: 16px 0 10px;
+      font-size: clamp(30px, 6vw, 48px);
+      line-height: 1.05;
+      animation: welcomeGlow 2.6s ease-in-out infinite;
+    }
+
+    .welcome-card p,
+    .auth-card p {
+      margin: 0 0 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    body.dark .welcome-card p,
+    body.dark .auth-card p {
+      color: #dfcfc6;
+    }
+
+    .top-btn {
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), #e58b4e);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 12px 28px rgba(199, 91, 44, 0.24);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+    }
+
+    .top-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(199, 91, 44, 0.28);
+      filter: saturate(1.05);
+    }
+
+    .auth-close {
+      background: linear-gradient(135deg, #66534a, #8e776d);
+      box-shadow: 0 12px 28px rgba(70, 49, 39, 0.18);
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .auth-tab {
+      flex: 1 1 0;
+      padding: 11px 14px;
+      border: 1px solid rgba(199, 91, 44, 0.14);
+      border-radius: 999px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--accent-deep);
+      font-weight: 700;
+      transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .auth-tab.active {
+      background: linear-gradient(135deg, var(--accent), #e58b4e);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(199, 91, 44, 0.24);
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .auth-form label {
+      display: grid;
+      gap: 7px;
+      font-weight: 700;
+    }
+
+    .auth-form span {
+      font-size: 14px;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid rgba(199, 91, 44, 0.14);
+      border-radius: 14px;
+      font: inherit;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--text-main);
+    }
+
+    body.dark .auth-form input,
+    body.dark .auth-tab {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .auth-actions,
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .auth-message {
+      min-height: 24px;
+      margin-top: 14px;
+      font-weight: 700;
+      color: #1b5e20;
+    }
+
+    .auth-message.error {
+      color: #b3261e;
+    }
+
+    .auth-status {
+      display: grid;
+      gap: 4px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 10px 24px rgba(102, 53, 28, 0.08);
+    }
+
+    .auth-status span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    body.dark .auth-status {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
     .quick-corner {
       display: flex;
       flex-wrap: wrap;
@@ -685,11 +961,41 @@
     }
 
     @media (max-width: 760px) {
+      .header {
+        padding: 26px 14px 22px;
+      }
+
+      .top-tools,
+      .controls,
+      .filters-bar,
+      .toolbar-group,
+      .auth-actions {
+        justify-content: stretch;
+      }
+
+      .top-btn,
       .dark-toggle,
-      .language-picker {
+      .language-picker,
+      .auth-tab {
         width: 100%;
         padding: 9px 11px;
         font-size: 13px;
+      }
+
+      .auth-status,
+      .search-shell,
+      .search-wrap,
+      .filters-bar {
+        width: 100%;
+      }
+
+      .chip {
+        flex: 1 1 calc(50% - 8px);
+        text-align: center;
+      }
+
+      .more-toggle {
+        flex-basis: 100%;
       }
 
       .quick-corner {
@@ -716,19 +1022,90 @@
         min-height: 220px;
       }
     }
+
+    @media (max-width: 520px) {
+      .controls,
+      .top-tools,
+      .detail-page,
+      .meal-lists,
+      .container {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .welcome-card,
+      .auth-card {
+        padding: 22px 18px;
+        border-radius: 22px;
+      }
+
+      .chip {
+        flex-basis: 100%;
+      }
+
+      .title {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <div class="welcome-card">
+      <div class="welcome-badge">Welcome</div>
+      <h2 id="welcomeTitle">SpiceRoute Recipe Studio</h2>
+      <p id="welcomeText">Fresh flavors, smart search, and easy recipe browsing for every screen.</p>
+      <button class="top-btn" id="welcomeButton" onclick="hideWelcomeOverlay()">Enter SpiceRoute</button>
+    </div>
+  </div>
+
+  <div class="auth-modal hidden" id="authModal">
+    <div class="auth-card">
+      <h2 id="authHeading">Join SpiceRoute</h2>
+      <p id="authIntro">Create an account or log in to keep your session ready on this device.</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="loginTab" type="button" onclick="switchAuthMode('login')">Login</button>
+        <button class="auth-tab" id="signupTab" type="button" onclick="switchAuthMode('signup')">Signup</button>
+      </div>
+      <form class="auth-form" id="authForm" onsubmit="submitAuth(event)">
+        <label>
+          <span id="authNameLabel">Full Name</span>
+          <input type="text" id="authName" placeholder="Enter your name" autocomplete="name">
+        </label>
+        <label>
+          <span id="authEmailLabel">Email</span>
+          <input type="email" id="authEmail" placeholder="Enter your email" required autocomplete="email">
+        </label>
+        <label>
+          <span id="authPasswordLabel">Password</span>
+          <input type="password" id="authPassword" placeholder="Create password" required autocomplete="current-password">
+        </label>
+        <div class="auth-actions">
+          <button class="top-btn" type="submit" id="authSubmit">Login</button>
+          <button class="top-btn auth-close" type="button" id="authCloseButton" onclick="closeAuthModal()">Close</button>
+        </div>
+      </form>
+      <div class="auth-message" id="authMessage" aria-live="polite"></div>
+    </div>
+  </div>
   <header class="header">
     <h1 id="siteTitle">SpiceRoute Recipe Studio</h1>
     <p id="siteIntro">Beautiful recipe cards with images, ingredients, spices, and step-by-step cooking help. Switch the site language anytime to make browsing easier for more users.</p>
   </header>
 
   <div class="top-tools" id="topTools">
-    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()">Dark Mode</button>
+    <div class="auth-status">
+      <strong id="userGreeting">Guest User</strong>
+      <span id="userStatus">Login to save your session on this device.</span>
+    </div>
 
-    <div class="language-picker">
+    <div class="toolbar-group">
+      <button class="top-btn" id="authOpenButton" type="button" onclick="openAuthModal()">Login / Signup</button>
+      <button class="top-btn hidden" id="logoutButton" type="button" onclick="logoutUser()">Logout</button>
+      <button class="dark-toggle" id="darkToggle" type="button" onclick="toggleDark()">Dark Mode</button>
+
+      <div class="language-picker">
       <label for="languageSelect" id="languageLabel">Language</label>
       <select id="languageSelect" onchange="changeLanguage()">
         <option value="en">English</option>
@@ -739,6 +1116,7 @@
         <option value="bn">বাংলা</option>
         <option value="bho">भोजपुरी</option>
       </select>
+      </div>
     </div>
 
     <aside class="quick-corner" id="quickCorner">
@@ -2055,6 +2433,10 @@
     let currentLanguage = "en";
     let currentFilter = "all";
     let activeDetailView = null;
+    let filtersExpanded = false;
+    let authMode = "login";
+    let currentUser = null;
+    const API_BASE_URL = `${window.location.origin}/api`;
 
     function t(key, replacements = {}) {
       const dictionary = translations[currentLanguage] || translations.en;
@@ -2064,6 +2446,69 @@
         return message.replace(new RegExp(`\\{${token}\\}`, "g"), value);
       }, template);
     }
+
+    function te(key, fallback, replacements = {}) {
+      const dictionary = translations[currentLanguage] || {};
+      const english = translations.en || {};
+      const template = dictionary[key] || english[key] || fallback;
+
+      return Object.entries(replacements).reduce((message, [token, value]) => {
+        return message.replace(new RegExp(`\\{${token}\\}`, "g"), value);
+      }, template);
+    }
+
+    const backendApi = {
+      async request(path, options = {}) {
+        const response = await fetch(`${API_BASE_URL}${path}`, {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          },
+          ...options
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data.error || "Request failed.");
+        }
+
+        return data;
+      },
+
+      async signup(payload) {
+        return this.request("/signup", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+      },
+
+      async login(payload) {
+        return this.request("/login", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+      },
+
+      async getSession() {
+        try {
+          return await this.request("/session");
+        } catch (error) {
+          return JSON.parse(localStorage.getItem("spiceroute-session") || "null");
+        }
+      },
+
+      async logout() {
+        try {
+          await this.request("/logout", { method: "POST" });
+        } catch (error) {
+          // Keep the UI responsive even if the server is temporarily unavailable.
+        }
+
+        localStorage.removeItem("spiceroute-session");
+      }
+    };
 
     const lunchRecipeNames = [
       "Dal Tadka",
@@ -2154,6 +2599,9 @@
       document.title = t("pageTitle");
       document.getElementById("siteTitle").textContent = t("pageTitle");
       document.getElementById("siteIntro").textContent = t("siteIntro");
+      document.getElementById("welcomeTitle").textContent = t("pageTitle");
+      document.getElementById("welcomeText").textContent = te("welcomeText", "Fresh flavors, smart search, and easy recipe browsing for every screen.");
+      document.getElementById("welcomeButton").textContent = te("enterSite", "Enter SpiceRoute");
       document.getElementById("darkToggle").textContent = t("darkMode");
       document.getElementById("languageLabel").textContent = t("language");
       document.getElementById("stateSummary").textContent = t("states");
@@ -2185,12 +2633,220 @@
           node.textContent = text;
         }
       });
+
+      const moreButton = document.getElementById("moreFiltersButton");
+      if (moreButton) {
+        moreButton.textContent = filtersExpanded ? te("lessFilters", "Less Filters") : te("moreFilters", "More Filters");
+      }
+
+      document.getElementById("authHeading").textContent = te("authHeading", "Join SpiceRoute");
+      document.getElementById("authIntro").textContent = te("authIntro", "Create an account or log in to keep your session ready on this device.");
+      document.getElementById("loginTab").textContent = te("loginButton", "Login");
+      document.getElementById("signupTab").textContent = te("signupButton", "Signup");
+      document.getElementById("authNameLabel").textContent = te("nameLabel", "Full Name");
+      document.getElementById("authEmailLabel").textContent = te("emailLabel", "Email");
+      document.getElementById("authPasswordLabel").textContent = te("passwordLabel", "Password");
+      document.getElementById("authName").placeholder = te("namePlaceholder", "Enter your name");
+      document.getElementById("authEmail").placeholder = te("emailPlaceholder", "Enter your email");
+      document.getElementById("authPassword").placeholder = authMode === "signup"
+        ? te("passwordCreate", "Create password")
+        : te("passwordEnter", "Enter password");
+      document.getElementById("authSubmit").textContent = authMode === "signup"
+        ? te("signupButton", "Signup")
+        : te("loginButton", "Login");
+      document.getElementById("authCloseButton").textContent = te("closeButton", "Close");
+      document.getElementById("authOpenButton").textContent = te("authOpen", "Login / Signup");
+      document.getElementById("logoutButton").textContent = te("logoutButton", "Logout");
     }
 
     function closeQuickBoxes() {
       document.querySelectorAll(".quick-box").forEach(box => {
         box.open = false;
       });
+    }
+
+    function enhanceControlsLayout() {
+      const controls = document.querySelector(".controls");
+      const searchInput = document.getElementById("search");
+
+      if (!controls || !searchInput || controls.dataset.enhanced === "true") {
+        return;
+      }
+
+      const chips = Array.from(controls.querySelectorAll(".chip"));
+      const searchShell = document.createElement("div");
+      const searchWrap = document.createElement("div");
+      const icon = document.createElement("span");
+      const clearButton = document.createElement("button");
+      const filtersBar = document.createElement("div");
+      const moreButton = document.createElement("button");
+
+      searchShell.className = "search-shell";
+      searchWrap.className = "search-wrap";
+      icon.className = "search-icon";
+      icon.innerHTML = "&#128269;";
+      clearButton.className = "search-clear";
+      clearButton.type = "button";
+      clearButton.innerHTML = "&#10005;";
+      clearButton.setAttribute("aria-label", "Clear search");
+      clearButton.onclick = () => {
+        searchInput.value = "";
+        syncSearchControls();
+        searchRecipe();
+        searchInput.focus();
+      };
+      filtersBar.className = "filters-bar";
+      filtersBar.id = "filtersBar";
+
+      moreButton.className = "chip more-toggle";
+      moreButton.id = "moreFiltersButton";
+      moreButton.type = "button";
+      moreButton.onclick = toggleFilters;
+
+      searchInput.parentElement?.removeChild(searchInput);
+      searchInput.removeAttribute("onkeyup");
+      searchInput.addEventListener("input", () => {
+        syncSearchControls();
+        searchRecipe();
+      });
+
+      searchWrap.append(icon, searchInput, clearButton);
+      searchShell.appendChild(searchWrap);
+      controls.prepend(searchShell);
+
+      chips.forEach((chip, index) => {
+        if (index > 1) {
+          chip.classList.add("extra-filter", "is-collapsed");
+        }
+
+        filtersBar.appendChild(chip);
+      });
+
+      if (chips.length > 2) {
+        filtersBar.appendChild(moreButton);
+      }
+
+      controls.appendChild(filtersBar);
+      controls.dataset.enhanced = "true";
+      syncSearchControls();
+      refreshStaticText();
+    }
+
+    function syncSearchControls() {
+      const searchInput = document.getElementById("search");
+      const clearButton = document.querySelector(".search-clear");
+
+      if (!searchInput || !clearButton) {
+        return;
+      }
+
+      clearButton.classList.toggle("visible", Boolean(searchInput.value.trim()));
+    }
+
+    function toggleFilters() {
+      filtersExpanded = !filtersExpanded;
+
+      document.querySelectorAll(".extra-filter").forEach(chip => {
+        chip.classList.toggle("is-collapsed", !filtersExpanded);
+      });
+
+      const moreButton = document.getElementById("moreFiltersButton");
+      if (moreButton) {
+        moreButton.classList.toggle("active", filtersExpanded);
+        moreButton.textContent = filtersExpanded ? te("lessFilters", "Less Filters") : te("moreFilters", "More Filters");
+      }
+    }
+
+    function showAuthMessage(message, isError = false) {
+      const node = document.getElementById("authMessage");
+      node.textContent = message;
+      node.classList.toggle("error", isError);
+    }
+
+    function switchAuthMode(mode) {
+      authMode = mode;
+      document.getElementById("loginTab").classList.toggle("active", mode === "login");
+      document.getElementById("signupTab").classList.toggle("active", mode === "signup");
+      document.getElementById("authName").parentElement.classList.toggle("hidden", mode === "login");
+      document.getElementById("authPassword").setAttribute("autocomplete", mode === "signup" ? "new-password" : "current-password");
+      document.getElementById("authSubmit").textContent = mode === "signup"
+        ? te("signupButton", "Signup")
+        : te("loginButton", "Login");
+      document.getElementById("authPassword").placeholder = mode === "signup"
+        ? te("passwordCreate", "Create password")
+        : te("passwordEnter", "Enter password");
+      showAuthMessage("");
+    }
+
+    function openAuthModal() {
+      document.getElementById("authModal").classList.remove("hidden");
+      switchAuthMode(authMode);
+      const targetField = authMode === "signup" ? document.getElementById("authName") : document.getElementById("authEmail");
+      targetField.focus();
+    }
+
+    function closeAuthModal() {
+      document.getElementById("authModal").classList.add("hidden");
+      showAuthMessage("");
+    }
+
+    function hideWelcomeOverlay() {
+      document.getElementById("welcomeOverlay").classList.add("hidden");
+    }
+
+    function updateAuthUI() {
+      const greeting = document.getElementById("userGreeting");
+      const status = document.getElementById("userStatus");
+      const openButton = document.getElementById("authOpenButton");
+      const logoutButton = document.getElementById("logoutButton");
+
+      if (currentUser) {
+        greeting.textContent = `${te("helloUser", "Hello")}, ${currentUser.name}`;
+        status.textContent = te("loggedInState", "Signed in on this device.");
+        openButton.classList.add("hidden");
+        logoutButton.classList.remove("hidden");
+      } else {
+        greeting.textContent = te("guestUser", "Guest User");
+        status.textContent = te("guestState", "Login to save your session on this device.");
+        openButton.classList.remove("hidden");
+        logoutButton.classList.add("hidden");
+      }
+    }
+
+    async function submitAuth(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("authName").value.trim();
+      const email = document.getElementById("authEmail").value.trim();
+      const password = document.getElementById("authPassword").value;
+
+      try {
+        if (authMode === "signup") {
+          if (!name) {
+            throw new Error("Please enter your full name.");
+          }
+
+          currentUser = await backendApi.signup({ name, email, password });
+          localStorage.setItem("spiceroute-session", JSON.stringify(currentUser));
+          showAuthMessage(te("signupSuccess", "Account created successfully."));
+        } else {
+          currentUser = await backendApi.login({ email, password });
+          localStorage.setItem("spiceroute-session", JSON.stringify(currentUser));
+          showAuthMessage(te("loginSuccess", "Login successful."));
+        }
+
+        updateAuthUI();
+        document.getElementById("authForm").reset();
+        setTimeout(() => closeAuthModal(), 500);
+      } catch (error) {
+        showAuthMessage(error.message || te("authFailed", "Unable to complete this request."), true);
+      }
+    }
+
+    async function logoutUser() {
+      await backendApi.logout();
+      currentUser = null;
+      updateAuthUI();
     }
 
     const clickLocks = {};
@@ -2481,6 +3137,7 @@
 
     function searchRecipe() {
       closeQuickBoxes();
+      syncSearchControls();
       updateRecipes();
       scrollToRecipeResults();
     }
@@ -2537,6 +3194,7 @@
     function changeLanguage() {
       currentLanguage = document.getElementById("languageSelect").value;
       refreshStaticText();
+      updateAuthUI();
       renderQuickCollections();
       renderMealLists();
       renderRecipes();
@@ -2554,11 +3212,35 @@
       document.body.classList.toggle("dark");
     }
 
-    document.getElementById("languageSelect").value = currentLanguage;
-    refreshStaticText();
-    renderQuickCollections();
-    renderMealLists();
-    renderRecipes();
+    async function initializeApp() {
+      document.getElementById("languageSelect").value = currentLanguage;
+      enhanceControlsLayout();
+      switchAuthMode("login");
+      currentUser = await backendApi.getSession();
+      refreshStaticText();
+      updateAuthUI();
+      renderQuickCollections();
+      renderMealLists();
+      renderRecipes();
+
+      setTimeout(() => {
+        hideWelcomeOverlay();
+      }, 2400);
+    }
+
+    document.getElementById("authModal").addEventListener("click", event => {
+      if (event.target.id === "authModal") {
+        closeAuthModal();
+      }
+    });
+
+    document.getElementById("welcomeOverlay").addEventListener("click", event => {
+      if (event.target.id === "welcomeOverlay") {
+        hideWelcomeOverlay();
+      }
+    });
+
+    initializeApp();
   </script>
 </body>
 </html>
